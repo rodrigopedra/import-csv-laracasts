@@ -56,22 +56,19 @@ class ImportContactsController
     public function update(Request $request, string $import)
     {
         $file = new \SplFileObject(\storage_path('app/imports/' . $import));
-        $file->setFlags(\SplFileObject::READ_CSV);
+        $file->setFlags(\SplFileObject::READ_CSV | \SplFileObject::READ_AHEAD | \SplFileObject::SKIP_EMPTY);
 
         $map = $request->input('map', []);
-        $header = \array_keys($map);
 
         $buffer = [];
+        $header = [];
         $attributes = [];
         $now = \now()->toDateTimeString();
 
         foreach ($file as $index => $record) {
             if ($index === 0) {
+                $header = $record;
                 continue; // skip headers
-            }
-
-            if (\blank($record) || (\count($record) === 1 && \blank($record[0]))) {
-                continue; // skip empty rows
             }
 
             $record = \array_combine($header, $record);
