@@ -47,7 +47,7 @@ available at the `./app/Http/Controllers/ImportContactsController.php` file.
 ```bash
 git clone https://github.com/rodrigopedra/import-csv-laracasts.git
 cd import-csv-laracasts
-cp .env .env.example
+cp .env.example .env
 composer install
 php artisan key:generate
 ```
